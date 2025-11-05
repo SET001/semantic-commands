@@ -1,6 +1,6 @@
 use std::{error::Error, str::FromStr, sync::Arc};
 
-use ai_bot::{Command, Input, OpenAIEmbedder, PostgresStorage, SemanticCommands};
+use ai_bot::{Command, Input, OpenAIEmbedder, PostgresCache, SemanticCommands};
 use anyhow::Context;
 use clap::Parser;
 use sqlx::postgres::{PgConnectOptions, PgPool, PgPoolOptions};
@@ -76,7 +76,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
 	let pool = PgPoolOptions::new().max_connections(1).connect_with(connect_options).await?;
 	let mut semantic_commands = SemanticCommands::new(
 		OpenAIEmbedder { token: openai_token },
-		PostgresStorage {
+		PostgresCache {
 			connection: pool.clone(),
 		},
 		AppContext { db: pool },

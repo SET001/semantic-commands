@@ -1,13 +1,13 @@
+mod caches;
 mod embedders;
-mod storages;
 
 pub use embedders::openai::OpenAIEmbedder;
 use futures::future::{BoxFuture, join_all};
 use log::{error, info};
 
-pub use storages::no_cache::NoCache;
+pub use caches::no_cache::NoCache;
 #[cfg(feature = "postgres")]
-pub use storages::postgres::PostgresStorage;
+pub use caches::postgres::PostgresCache;
 
 use std::sync::Arc;
 

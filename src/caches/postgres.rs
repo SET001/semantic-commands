@@ -7,7 +7,7 @@ use crate::Cache;
 
 const INPUT_TABLE_NAME: &str = "input";
 
-pub struct PostgresStorage {
+pub struct PostgresCache {
 	pub connection: PgPool,
 }
 
@@ -18,7 +18,7 @@ pub struct PgInput {
 }
 
 #[async_trait::async_trait]
-impl Cache for PostgresStorage {
+impl Cache for PostgresCache {
 	async fn init(&self) -> Result<()> {
 		debug!("initializing Postgres storage...");
 		let queries = vec![format!(

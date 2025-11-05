@@ -15,6 +15,9 @@ pub struct Input {
 }
 
 impl Input {
+	/// Create a new input from raw text
+	///
+	/// The text will be normalized automatically
 	pub fn new(text: &str) -> Self {
 		Self {
 			text: normalize(text),

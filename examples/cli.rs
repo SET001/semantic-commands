@@ -1,8 +1,8 @@
 use std::{error::Error, str::FromStr};
 
-use ai_bot::{OpenAIEmbedder, PostgresCache, SemanticCommands};
 use anyhow::Context;
 use clap::Parser;
+use semantic_commands::{OpenAIEmbedder, PostgresCache, SemanticCommands};
 use sqlx::postgres::{PgConnectOptions, PgPool, PgPoolOptions};
 mod tasks;
 

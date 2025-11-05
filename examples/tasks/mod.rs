@@ -1,7 +1,6 @@
 use std::sync::Arc;
-use std::{any::Any, pin::Pin};
 
-use ai_bot::{Command, Input, async_executor};
+use semantic_commands::{Command, Input, async_executor};
 
 #[derive(serde::Deserialize)]
 struct BinancePriceResponse {

@@ -18,26 +18,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ai-bot"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "async-trait",
- "chrono",
- "clap",
- "dotenv",
- "env_logger",
- "futures",
- "log",
- "reqwest",
- "serde",
- "sqlx",
- "tokio",
- "tracing",
- "twilight-gateway",
-]
-
-[[package]]
 name = "allocator-api2"
 version = "0.2.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1847,6 +1827,26 @@ checksum = "cc1f0cbffaac4852523ce30d8bd3c5cdc873501d96ff467ca09b6767bb8cd5c0"
 dependencies = [
  "core-foundation-sys",
  "libc",
+]
+
+[[package]]
+name = "semantic-commands"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "chrono",
+ "clap",
+ "dotenv",
+ "env_logger",
+ "futures",
+ "log",
+ "reqwest",
+ "serde",
+ "sqlx",
+ "tokio",
+ "tracing",
+ "twilight-gateway",
 ]
 
 [[package]]

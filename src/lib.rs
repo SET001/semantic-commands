@@ -168,6 +168,13 @@ impl<E: Embedder, Ch: Cache, C> SemanticCommands<E, Ch, C> {
 		self
 	}
 
+	pub fn add_commands(&mut self, commands: Vec<(Command<C>, Vec<Input>)>) -> &mut Self {
+		commands.into_iter().for_each(|(command, inputs)| {
+			self.entries.push((inputs, command));
+		});
+		self
+	}
+
 	pub async fn init(&mut self) -> Result<()> {
 		self.cache.init().await?;
 		Ok(())

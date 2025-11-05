@@ -1,9 +1,10 @@
-use std::{error::Error, str::FromStr, sync::Arc};
+use std::{error::Error, str::FromStr};
 
-use ai_bot::{Command, Input, OpenAIEmbedder, PostgresCache, SemanticCommands};
+use ai_bot::{OpenAIEmbedder, PostgresCache, SemanticCommands};
 use anyhow::Context;
 use clap::Parser;
 use sqlx::postgres::{PgConnectOptions, PgPool, PgPoolOptions};
+mod tasks;
 
 #[derive(Parser)]
 struct Cli {
@@ -34,23 +35,6 @@ pub struct DBConfig {
 
 pub struct AppContext {
 	pub db: PgPool,
-}
-
-async fn get_coin_course<C>(_context: Arc<C>) -> anyhow::Result<()> {
-	println!("executing get_coin_course command");
-	Ok(())
-}
-
-async fn get_date<C>(_context: Arc<C>) -> anyhow::Result<()> {
-	Ok(())
-}
-
-async fn greet<C>(_context: Arc<C>) -> anyhow::Result<()> {
-	Ok(())
-}
-
-async fn ping<C>(_context: Arc<C>) -> anyhow::Result<()> {
-	Ok(())
 }
 
 #[tokio::main]
@@ -84,38 +68,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
 	semantic_commands.init().await?;
 
 	semantic_commands
-		.add_command(
-			Command {
-				name: "get_date".to_string(),
-				requires_confirmation: false,
-				executor: Box::new(|ctx| Box::pin(async move { get_date(ctx).await })),
-			},
-			vec![Input::new("what is the date today")],
-		)
-		.add_command(
-			Command {
-				name: "crypto_rate".to_string(),
-				requires_confirmation: false,
-				executor: Box::new(|ctx| Box::pin(async move { get_coin_course(ctx).await })),
-			},
-			vec![Input::new("price of {coin")],
-		)
-		.add_command(
-			Command {
-				name: "greet".to_string(),
-				requires_confirmation: false,
-				executor: Box::new(|ctx| Box::pin(async move { greet(ctx).await })),
-			},
-			vec![Input::new("hello")],
-		)
-		.add_command(
-			Command {
-				name: "ping".to_string(),
-				requires_confirmation: false,
-				executor: Box::new(|ctx| Box::pin(async move { ping(ctx).await })),
-			},
-			vec![Input::new("ping")],
-		)
+		.add_commands(tasks::get_commands())
 		.execute(&args.input)
 		.await?;
 	Ok(())

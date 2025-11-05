@@ -1,26 +1,12 @@
 use std::sync::Arc;
 use std::{any::Any, pin::Pin};
 
-use ai_bot::{Command, Input};
+use ai_bot::{Command, Input, async_executor};
 
 #[derive(serde::Deserialize)]
 struct BinancePriceResponse {
 	// symbol: String,
 	price: String,
-}
-
-fn async_executor<C, F, Fut, R>(
-	f: F,
-) -> Box<dyn Fn(Arc<C>) -> Pin<Box<dyn Future<Output = Box<dyn Any + Send>> + Send>> + Send + Sync>
-where
-	F: Fn(Arc<C>) -> Fut + Send + Sync + 'static,
-	Fut: Future<Output = R> + Send + 'static,
-	R: Any + Send + 'static,
-{
-	Box::new(move |ctx: Arc<C>| {
-		let fut = f(ctx);
-		Box::pin(async move { Box::new(fut.await) as Box<dyn Any + Send> })
-	})
 }
 
 pub async fn get_coin_course<C>(_context: Arc<C>) -> anyhow::Result<String> {

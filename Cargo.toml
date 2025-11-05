@@ -5,12 +5,10 @@ edition = "2024"
 
 [dependencies]
 anyhow = "1.0.100"
-dotenv = "0.15.0"
 reqwest = {version="0.12.24", features=["json"]}
 serde = "1.0.228"
 tokio = {version="1.48.0", features=["full"]}
 tracing = "0.1.41"
-twilight-gateway = "0.16.0"
 sqlx = {version = "0.8", features = ["runtime-tokio","tls-native-tls","postgres"], optional=true}
 futures = "0.3.31"
 log = "0.4.28"
@@ -20,6 +18,7 @@ async-trait = "0.1.89"
 chrono = "0.4.42"
 clap = {version="4.5.50", features = ["derive"]}
 env_logger = "0.11.8"
+dotenv = "0.15.0"
 
 [features]
 postgres = ["dep:sqlx"]

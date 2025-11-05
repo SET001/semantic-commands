@@ -5,6 +5,7 @@ pub use embedders::openai::OpenAIEmbedder;
 use futures::future::{BoxFuture, join_all};
 use log::{error, info};
 
+pub use storages::no_cache::NoCache;
 #[cfg(feature = "postgres")]
 pub use storages::postgres::PostgresStorage;
 

@@ -72,7 +72,7 @@ impl<E: Embedder, Ch: Cache, C> SemanticCommands<E, Ch, C> {
 			.flat_map(|(inputs, command)| {
 				let emb = embedding.clone();
 				inputs.iter().filter_map(move |input| {
-					let similarity = cosine_similarity(&emb, input.empedding.as_ref().unwrap());
+					let similarity = cosine_similarity(&emb, input.empedding.as_ref()?);
 					(similarity >= threshold).then_some((similarity, input, command))
 				})
 			})

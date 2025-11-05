@@ -27,6 +27,7 @@ pub struct SemanticCommands<E: Embedder, Ch: Cache, C> {
 	embedder: Arc<E>,
 	cache: Arc<Ch>,
 	context: Arc<C>,
+	threshold: f32,
 	entries: Vec<(Vec<Input>, Command<C>)>,
 }
 impl<E: Embedder, Ch: Cache, C> SemanticCommands<E, Ch, C> {
@@ -47,8 +48,15 @@ impl<E: Embedder, Ch: Cache, C> SemanticCommands<E, Ch, C> {
 			embedder: Arc::new(embedder),
 			cache: Arc::new(cache),
 			context: Arc::new(context),
+			threshold: 0.2,
 			entries: vec![],
 		}
+	}
+
+	// Set the similarity threshold (default is 0.2)
+	pub fn threshold(mut self, threshold: f32) -> Self {
+		self.threshold = threshold;
+		self
 	}
 
 	async fn find_similar(&mut self, embedding: Vec<f32>, threshold: f32) -> Result<Option<(&Input, &Command<C>)>> {
@@ -99,7 +107,7 @@ impl<E: Embedder, Ch: Cache, C> SemanticCommands<E, Ch, C> {
 	pub async fn execute(&mut self, input: &str) -> Result<Box<dyn Any + Send>> {
 		let input_embedding = self.get_embedding(input).await?;
 		let context = self.context.clone();
-		let similar = self.find_similar(input_embedding, 0.2).await?;
+		let similar = self.find_similar(input_embedding, self.threshold).await?;
 		match similar {
 			Some((_input, command)) => {
 				info!("command recognized as: {:?}", command.name);

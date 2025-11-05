@@ -1658,7 +1658,6 @@ dependencies = [
  "serde",
  "sqlx",
  "tokio",
- "tracing",
 ]
 
 [[package]]

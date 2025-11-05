@@ -45,7 +45,7 @@ impl<E: Embedder, Ch: Cache, C> SemanticCommands<E, Ch, C> {
 			.entries
 			.iter()
 			.flat_map(|(inputs, _)| inputs)
-			.filter(|input| input.empedding.is_none())
+			.filter(|input| input.embedding.is_none())
 			.map(|input| input.text.clone())
 			.collect();
 
@@ -60,8 +60,8 @@ impl<E: Embedder, Ch: Cache, C> SemanticCommands<E, Ch, C> {
 		let mut emb_iter = embeddings.into_iter();
 		for (inputs, _) in &mut self.entries {
 			for input in inputs {
-				if input.empedding.is_none() {
-					input.empedding = emb_iter.next();
+				if input.embedding.is_none() {
+					input.embedding = emb_iter.next();
 				}
 			}
 		}
@@ -72,7 +72,7 @@ impl<E: Embedder, Ch: Cache, C> SemanticCommands<E, Ch, C> {
 			.flat_map(|(inputs, command)| {
 				let emb = embedding.clone();
 				inputs.iter().filter_map(move |input| {
-					let similarity = cosine_similarity(&emb, input.empedding.as_ref()?);
+					let similarity = cosine_similarity(&emb, input.embedding.as_ref()?);
 					(similarity >= threshold).then_some((similarity, input, command))
 				})
 			})

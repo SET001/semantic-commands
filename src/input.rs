@@ -11,14 +11,14 @@ fn normalize(s: &str) -> String {
 #[derive(Default, Debug)]
 pub struct Input {
 	pub text: String,
-	pub empedding: Option<Vec<f32>>,
+	pub embedding: Option<Vec<f32>>,
 }
 
 impl Input {
 	pub fn new(text: &str) -> Self {
 		Self {
 			text: normalize(text),
-			empedding: None,
+			embedding: None,
 		}
 	}
 }

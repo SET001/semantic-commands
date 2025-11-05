@@ -53,7 +53,7 @@ impl<E: Embedder, Ch: Cache, C> SemanticCommands<E, Ch, C> {
 		}
 	}
 
-	// Set the similarity threshold (default is 0.2)
+	/// Set the similarity threshold (default is 0.2)
 	pub fn threshold(mut self, threshold: f32) -> Self {
 		self.threshold = threshold;
 		self

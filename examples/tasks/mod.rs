@@ -9,6 +9,20 @@ struct BinancePriceResponse {
 	price: String,
 }
 
+fn async_executor<C, F, Fut, R>(
+	f: F,
+) -> Box<dyn Fn(Arc<C>) -> Pin<Box<dyn Future<Output = Box<dyn Any + Send>> + Send>> + Send + Sync>
+where
+	F: Fn(Arc<C>) -> Fut + Send + Sync + 'static,
+	Fut: Future<Output = R> + Send + 'static,
+	R: Any + Send + 'static,
+{
+	Box::new(move |ctx: Arc<C>| {
+		let fut = f(ctx);
+		Box::pin(async move { Box::new(fut.await) as Box<dyn Any + Send> })
+	})
+}
+
 pub async fn get_coin_course<C>(_context: Arc<C>) -> anyhow::Result<String> {
 	let price = reqwest::get("https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT")
 		.await?
@@ -38,9 +52,7 @@ where
 			Command {
 				name: "get_date".to_string(),
 				requires_confirmation: false,
-				executor: Box::new(|ctx: Arc<C>| -> Pin<Box<dyn Future<Output = Box<dyn Any + Send>> + Send>> {
-					Box::pin(async move { Box::new(get_date(ctx).await) as Box<dyn Any + Send> })
-				}),
+				executor: async_executor(get_date),
 			},
 			vec![Input::new("what is the date today")],
 		),
@@ -48,19 +60,15 @@ where
 			Command {
 				name: "crypto_rate".to_string(),
 				requires_confirmation: false,
-				executor: Box::new(|ctx: Arc<C>| -> Pin<Box<dyn Future<Output = Box<dyn Any + Send>> + Send>> {
-					Box::pin(async move { Box::new(get_coin_course(ctx).await) as Box<dyn Any + Send> })
-				}),
+				executor: async_executor(get_coin_course),
 			},
-			vec![Input::new("price of {coin")],
+			vec![Input::new("price of bitcoin")],
 		),
 		(
 			Command {
 				name: "greet".to_string(),
 				requires_confirmation: false,
-				executor: Box::new(|ctx: Arc<C>| -> Pin<Box<dyn Future<Output = Box<dyn Any + Send>> + Send>> {
-					Box::pin(async move { Box::new(greet(ctx).await) as Box<dyn Any + Send> })
-				}),
+				executor: async_executor(greet),
 			},
 			vec![Input::new("hello")],
 		),
@@ -68,9 +76,7 @@ where
 			Command {
 				name: "ping".to_string(),
 				requires_confirmation: false,
-				executor: Box::new(|ctx: Arc<C>| -> Pin<Box<dyn Future<Output = Box<dyn Any + Send>> + Send>> {
-					Box::pin(async move { Box::new(ping(ctx).await) as Box<dyn Any + Send> })
-				}),
+				executor: async_executor(ping),
 			},
 			vec![Input::new("ping")],
 		),

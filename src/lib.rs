@@ -9,9 +9,9 @@ pub use caches::no_cache::NoCache;
 #[cfg(feature = "postgres")]
 pub use caches::postgres::PostgresCache;
 
-use std::sync::Arc;
+use std::{any::Any, pin::Pin, sync::Arc};
 
-use anyhow::Result;
+use anyhow::{Result, bail};
 
 fn cosine_similarity(a: &[f32], b: &[f32]) -> f32 {
 	let dot: f32 = a.iter().zip(b).map(|(x, y)| x * y).sum();
@@ -44,21 +44,12 @@ impl Input {
 		}
 	}
 }
+type Executor<C> = Box<dyn Fn(Arc<C>) -> Pin<Box<dyn Future<Output = Box<dyn Any + Send>> + Send>> + Send + Sync>;
 
 pub struct Command<C> {
 	pub name: String,
 	pub requires_confirmation: bool,
-	pub executor: Box<dyn Fn(Arc<C>) -> BoxFuture<'static, Result<()>> + Send + Sync>,
-}
-
-impl Default for Command<()> {
-	fn default() -> Self {
-		Self {
-			name: String::new(),
-			requires_confirmation: false,
-			executor: Box::new(|_ctx: Arc<()>| Box::pin(async move { Ok(()) })),
-		}
-	}
+	pub executor: Executor<C>,
 }
 
 #[async_trait::async_trait]
@@ -72,7 +63,7 @@ pub trait Cache {
 pub trait Embedder {
 	async fn embed(&self, input: &str) -> Result<Vec<f32>>;
 }
-pub type Executor<C> = Box<dyn Fn(Arc<C>) -> BoxFuture<'static, Result<()>> + Send + Sync>;
+
 pub struct SemanticCommands<E: Embedder, Ch: Cache, C> {
 	embedder: Arc<E>,
 	cache: Arc<Ch>,
@@ -147,20 +138,20 @@ impl<E: Embedder, Ch: Cache, C> SemanticCommands<E, Ch, C> {
 			.map(|(_similarity, input, command)| (input, command)))
 	}
 
-	pub async fn execute(&mut self, input: &str) -> Result<()> {
+	pub async fn execute(&mut self, input: &str) -> Result<Box<dyn Any + Send>> {
 		let input_embedding = self.get_embedding(input).await?;
 		let context = self.context.clone();
 		let similar = self.find_similar(input_embedding, 0.2).await?;
 		match similar {
 			Some((_input, command)) => {
 				info!("command recognized as: {:?}", command.name);
-				(command.executor)(context).await?;
+				let result = (command.executor)(context).await;
+				return Ok(result);
 			}
 			None => {
-				error!("no similar command found");
+				bail!("no similar command found");
 			}
-		};
-		Ok(())
+		}
 	}
 
 	pub fn add_command(&mut self, command: Command<C>, inputs: Vec<Input>) -> &mut Self {

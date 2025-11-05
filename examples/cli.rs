@@ -67,9 +67,13 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
 	);
 	semantic_commands.init().await?;
 
-	semantic_commands
+	let res = semantic_commands
 		.add_commands(tasks::get_commands())
 		.execute(&args.input)
-		.await?;
+		.await?
+		.downcast::<anyhow::Result<String>>()
+		.unwrap()
+		.unwrap();
+	println!("{:?}", res);
 	Ok(())
 }

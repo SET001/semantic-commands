@@ -2,7 +2,7 @@
 
 [![Crates.io](https://img.shields.io/crates/v/semantic-commands)](https://crates.io/crates/semantic-commands)
 
-A lightweight Rust framework for defining and executing semantic commands using text embeddings. Frontend‑agnostic and async‑first: route user phrases to your functions based on semantic similarity. Use it from CLI apps, web or desktop apps.
+A lightweight Rust framework for defining and executing semantic commands using text embeddings. Frontend‑agnostic and async‑first: route user phrases to your functions based on semantic similarity. Use it in CLI tools, services, web, or desktop applications.
 
 ---
 
@@ -21,7 +21,7 @@ A lightweight Rust framework for defining and executing semantic commands using 
 
 ## Usage
 
-### Define Commands
+Define Commands
 
 ```rust
 async fn get_date(_ctx: Arc<()>) -> String {
@@ -38,18 +38,18 @@ let inputs = vec![
 ];
 ```
 
-### Initialize SemanticCommands
+Initialize SemanticCommands
 
 ```rust
 let mut semantic_commands = SemanticCommands::new(
-	OpenAIEmbedder,	//	OpenAIEmbedder or implement your own.
-	NoCache,				//	PostgresCache |	NoCache or implement your own.
+	OpenAIEmbedder,		//	OpenAIEmbedder or implement your own.
+	NoCache,			//	PostgresCache |	NoCache or implement your own.
 	AppContext			//	define your context which will be available in command executors.
 );
 semantic_commands.add_command(command, inputs);
 ```
 
-### Execute a Command
+Execute a Command
 
 ```rust
 let result = semantic_commands.execute("what is the current BTC price?").await?;
@@ -66,6 +66,14 @@ println!("Date: {:?}", result.downcast::<anyhow::Result<String>>().unwrap().unwr
 ## Safety & Privacy
 
 Using remote embedding providers (like OpenAI) sends input text to third‑party services. Do not embed secrets or private data you cannot share.
+
+---
+
+## Extensibility
+
+You can implement:
+* A custom `Embedder` (e.g. local model)
+* A custom `Cache`
 
 ---
 

@@ -2,18 +2,19 @@
 
 [![Crates.io](https://img.shields.io/crates/v/semantic-commands)](https://crates.io/crates/semantic-commands)
 
-A Rust library for defining, managing, and executing semantic commands with asynchronous support and flexible output handling. Designed to be frontend-agnostic, allowing commands to return results that can be consumed in CLI applications, web apps, or API services.
+A lightweight Rust framework for defining and executing semantic commands using text embeddings. Frontend‑agnostic and async‑first: route user phrases to your functions based on semantic similarity. Use it from CLI apps, web or descktop apps.
 
 ---
 
 ## Features
 
-* Define commands with inputs and async executors.
-* Flexible output types.
+* Define commands with multiple example phrases.
+* Async executors with typed results (downcast at call site).
+* Pluggable embeddings (implemented: OpenAI)
 * Command recognition based on input similarity.
-* Optional caching layer for embeddings.
+* Optional caching layer for embeddings (implemented: PostgreSQL).
 * Context-aware execution.
-* Easy integration with multiple interfaces (CLI, web, API).
+* Easy integration with multiple interfaces (CLI, web, API, messaging bots).
 
 ---
 
@@ -107,8 +108,12 @@ async_executor(get_date)
 * **Caching**: Supports pluggable cache layers; you can provide `NoCache` if caching is not needed.
 * **Context support**: Pass shared context (`Arc<C>`) to executors for richer command behavior.
 
----
 
+## Safety & Privacy
+
+Using remote embedding providers (like OpenAI) sends input text to third‑party services. Do not embed secrets or private data you cannot share.
+
+---
 
 ## License
 <sup>

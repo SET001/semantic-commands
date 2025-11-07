@@ -24,53 +24,42 @@ A lightweight Rust framework for defining and executing semantic commands using 
 ### Define Commands
 
 ```rust
-use semantic_commands::{Command, async_executor};
-use std::sync::Arc;
-
 async fn get_date(_ctx: Arc<()>) -> String {
-    "2025-11-05".to_string()
+	"2025-11-05".to_string()
 }
 
-async fn get_coin_course(_ctx: Arc<()>) -> f64 {
-    29750.0
-}
-
-let commands = vec![
-    Command {
-        name: "get_date".to_string(),
-        requires_confirmation: false,
-        executor: async_executor(get_date),
-    },
-    Command {
-        name: "crypto_rate".to_string(),
-        requires_confirmation: false,
-        executor: async_executor(get_coin_course),
-    },
+let command = Command {
+	name: "get_date".to_string(),
+	requires_confirmation: false,
+	executor: async_executor(get_date),
+};
+let inputs = vec![
+	Input::new("what's the date"),
 ];
 ```
 
 ### Initialize SemanticCommands
 
 ```rust
-use semantic_commands::SemanticCommands;
-use std::sync::Arc;
-
-let embedder = Arc::new(MyEmbedder::new()); // your embedder implementation
-let cache = Arc::new(NoCache::new());      // or your caching layer. Use NoCache if no caching needed
-
-let mut semantic_commands = SemanticCommands::new(embedder, cache);
-semantic_commands.add_commands(commands);
+let mut semantic_commands = SemanticCommands::new(
+	OpenAIEmbedder,	//	OpenAIEmbedder or implemnent your own.
+	NoCache,				//	PostgresCache |	NoCache or implemnent your own.
+	AppContext			//	define your context wich will be available in command executors.
+);
+semantic_commands.add_command(command, inputs);
 ```
 
 ### Execute a Command
 
 ```rust
-let input = "what is the current BTC price?";
-let result = semantic_commands.execute(input).await?;
-println!("Result: {:?}", result);
+let result = semantic_commands.execute("what is the current BTC price?").await?;
 ```
 
-The result can be a `serde_json::Value` or any type returned by your executor.
+The result should be then downcasted to whatever type returned by your executor:
+
+```rust
+println!("Date: {:?}", result.downcast::<anyhow::Result<String>>().unwrap().unwrap());
+```
 
 ---
 

@@ -48,7 +48,7 @@ impl<E: Embedder, Ch: Cache, C> SemanticCommands<E, Ch, C> {
 			embedder: Arc::new(embedder),
 			cache: Arc::new(cache),
 			context: Arc::new(context),
-			threshold: 0.2,
+			threshold: 0.8,
 			entries: vec![],
 		}
 	}
@@ -132,9 +132,9 @@ impl<E: Embedder, Ch: Cache, C> SemanticCommands<E, Ch, C> {
 		self
 	}
 
-	pub async fn init(&mut self) -> Result<()> {
+	pub async fn init(&mut self) -> Result<&mut Self> {
 		self.cache.init().await?;
-		Ok(())
+		Ok(self)
 	}
 }
 

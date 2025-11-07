@@ -63,41 +63,6 @@ println!("Date: {:?}", result.downcast::<anyhow::Result<String>>().unwrap().unwr
 
 ---
 
-## API Overview
-
-### `Command<C>`
-
-Represents a single command.
-
-* `name: String` — name of the command.
-* `requires_confirmation: bool` — whether the command needs confirmation.
-* `executor: Executor<C>` — async function to execute the command.
-
-### `SemanticCommands<E, Ch, C>`
-
-Manages multiple commands and performs similarity-based matching.
-
-* `add_commands(commands: Vec<Command<C>>) -> &mut Self` — add multiple commands.
-* `execute(input: &str) -> Result<serde_json::Value>` — execute the command most similar to input.
-
-### `async_executor` helper
-
-Simplifies creating an executor from an async function:
-
-```rust
-async_executor(get_date)
-```
-
----
-
-## Features in Depth
-
-* **Input similarity matching**: Commands are chosen based on vector embeddings and a similarity threshold.
-* **Flexible execution**: Executors can return any type.
-* **Caching**: Supports pluggable cache layers; you can provide `NoCache` if caching is not needed.
-* **Context support**: Pass shared context (`Arc<C>`) to executors for richer command behavior.
-
-
 ## Safety & Privacy
 
 Using remote embedding providers (like OpenAI) sends input text to third‑party services. Do not embed secrets or private data you cannot share.

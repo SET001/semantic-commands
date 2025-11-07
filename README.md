@@ -2,7 +2,7 @@
 
 [![Crates.io](https://img.shields.io/crates/v/semantic-commands)](https://crates.io/crates/semantic-commands)
 
-A lightweight Rust framework for defining and executing semantic commands using text embeddings. Frontend‑agnostic and async‑first: route user phrases to your functions based on semantic similarity. Use it from CLI apps, web or descktop apps.
+A lightweight Rust framework for defining and executing semantic commands using text embeddings. Frontend‑agnostic and async‑first: route user phrases to your functions based on semantic similarity. Use it from CLI apps, web or desktop apps.
 
 ---
 
@@ -42,9 +42,9 @@ let inputs = vec![
 
 ```rust
 let mut semantic_commands = SemanticCommands::new(
-	OpenAIEmbedder,	//	OpenAIEmbedder or implemnent your own.
-	NoCache,				//	PostgresCache |	NoCache or implemnent your own.
-	AppContext			//	define your context wich will be available in command executors.
+	OpenAIEmbedder,	//	OpenAIEmbedder or implement your own.
+	NoCache,				//	PostgresCache |	NoCache or implement your own.
+	AppContext			//	define your context which will be available in command executors.
 );
 semantic_commands.add_command(command, inputs);
 ```

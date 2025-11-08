@@ -10,6 +10,7 @@ mod semantic_commands;
 
 pub use semantic_commands::SemanticCommands;
 
+pub use caches::in_memory::InMemoryCache;
 pub use caches::no_cache::NoCache;
 #[cfg(feature = "postgres")]
 pub use caches::postgres::PostgresCache;

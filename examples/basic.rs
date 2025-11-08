@@ -1,5 +1,5 @@
 use anyhow::Result;
-use semantic_commands::{Command, Input, NoCache, OpenAIEmbedder, SemanticCommands, async_executor};
+use semantic_commands::{Command, InMemoryCache, Input, NoCache, OpenAIEmbedder, SemanticCommands, async_executor};
 use std::sync::Arc;
 
 #[derive(Clone)]
@@ -28,7 +28,7 @@ async fn main() -> Result<()> {
 		Input::new("current date"),
 	];
 
-	let date = SemanticCommands::new(embedder, NoCache, AppContext)
+	let date = SemanticCommands::new(embedder, InMemoryCache::default(), AppContext)
 		.add_command(cmd, inputs)
 		.init()
 		.await?

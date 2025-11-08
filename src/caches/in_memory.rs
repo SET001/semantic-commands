@@ -58,12 +58,10 @@ impl Default for InMemoryCache {
 #[async_trait::async_trait]
 impl Cache for InMemoryCache {
 	async fn get(&self, input: &str) -> Result<Option<Vec<f32>>> {
-		// Must dereference Arc and clone the Vec
 		Ok(self.cache.get(input).await.map(|arc| (*arc).clone()))
 	}
 
 	async fn put(&self, input: &str, embedding: Vec<f32>) -> Result<()> {
-		// Must wrap in Arc and await the insert
 		self.cache.insert(input.to_string(), Arc::new(embedding)).await;
 		Ok(())
 	}

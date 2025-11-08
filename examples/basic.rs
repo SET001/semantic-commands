@@ -1,5 +1,5 @@
 use anyhow::Result;
-use semantic_commands::{Command, InMemoryCache, Input, NoCache, OpenAIEmbedder, SemanticCommands, async_executor};
+use semantic_commands::{Command, InMemoryCache, Input, OpenAIEmbedder, SemanticCommands, async_executor};
 use std::sync::Arc;
 
 #[derive(Clone)]

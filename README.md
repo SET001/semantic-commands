@@ -63,6 +63,26 @@ println!("Date: {:?}", result.downcast::<anyhow::Result<String>>().unwrap().unwr
 
 ---
 
+
+## Caching Options
+
+| Cache | Speed | Memory | Persistence | Use Case |
+|-------|-------|--------|-------------|----------|
+| `NoCache` | N/A | None | N/A | Testing, stateless |
+| `InMemoryCache` | Fast | Unbounded | No | Services, bots |
+| `PostgresCache` | Slow | DB-backed | Yes | Multi-instance |
+
+---
+
+## Features
+
+- `openai` (default) - OpenAI embedding provider
+- `in-memory-cache` (default) - Fast in-memory LRU cache based on [moka](https://crates.io/crates/moka)
+- `postgres` - PostgreSQL cache backend (implemented with [sqlx](https://crates.io/crates/sqlx))
+- `full` - All features enabled
+
+---
+
 ## Safety & Privacy
 
 Using remote embedding providers (like OpenAI) sends input text to third‑party services. Do not embed secrets or private data you cannot share.

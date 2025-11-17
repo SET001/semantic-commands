@@ -14,7 +14,7 @@ A lightweight Rust framework for defining and executing semantic commands using 
 * Async executors with typed results (downcast at call site).
 * Pluggable embeddings (implemented: OpenAI)
 * Command recognition based on input similarity.
-* Optional caching layer for embeddings (implemented: PostgreSQL).
+* Optional caching layer for embeddings (implemented: PostgreSQL, InMemoryCache).
 * Context-aware execution.
 * Easy integration with multiple interfaces (CLI, web, API, messaging bots).
 

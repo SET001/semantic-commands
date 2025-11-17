@@ -1,4 +1,4 @@
-use std::{any::Any, pin::Pin, sync::Arc};
+use std::{any::Any, future::Future, pin::Pin, sync::Arc};
 
 type Executor<C> = Box<dyn Fn(Arc<C>) -> Pin<Box<dyn Future<Output = Box<dyn Any + Send>> + Send>> + Send + Sync>;
 

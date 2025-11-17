@@ -112,7 +112,7 @@ impl<E: Embedder, Ch: Cache, C> SemanticCommands<E, Ch, C> {
 			Some((_input, command)) => {
 				info!("command recognized as: {:?}", command.name);
 				let result = (command.executor)(context).await;
-				return Ok(result);
+				Ok(result)
 			}
 			None => {
 				bail!("no similar command found");

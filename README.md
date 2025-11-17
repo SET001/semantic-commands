@@ -1,6 +1,8 @@
 # Semantic Commands
 
 [![Crates.io](https://img.shields.io/crates/v/semantic-commands)](https://crates.io/crates/semantic-commands)
+[![Documentation](https://docs.rs/semantic-commands/badge.svg)](https://docs.rs/semantic-commands)
+[![License](https://img.shields.io/crates/l/semantic-commands)](LICENSE-MIT)
 
 A lightweight Rust framework for defining and executing semantic commands using text embeddings. Frontend‑agnostic and async‑first: route user phrases to your functions based on semantic similarity. Use it in CLI tools, services, web, or desktop applications.
 

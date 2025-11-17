@@ -6,7 +6,7 @@ license = "MIT OR Apache-2.0"
 authors = ["Kostiantyn Kostiuk (SET001) settydark@gmail.com"]
 description = "A lightweight Rust framework for defining and executing semantic commands using text embeddings"
 repository = "https://github.com/SET001/semantic-commands"
-categories = ["command-line-utilities", "asynchronous", "ai", "text-processing"]
+categories = ["command-line-utilities", "asynchronous", "text-processing"]
 keywords = ["nlp", "semantic", "commands", "embeddings", "bot"]
 readme = "README.md"
 

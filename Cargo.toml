@@ -7,7 +7,7 @@ authors = ["Kostiantyn Kostiuk (SET001) settydark@gmail.com"]
 description = "A lightweight Rust framework for defining and executing semantic commands using text embeddings"
 repository = "https://github.com/SET001/semantic-commands"
 categories = ["command-line-utilities", "asynchronous", "ai", "text-processing"]
-keywords = ["nlp", "semantic", "similarity", "commands", "embeddings", "ai", "bot","natural-language", "semantic-router"]
+keywords = ["nlp", "semantic", "commands", "embeddings", "bot"]
 readme = "README.md"
 
 [dependencies]
